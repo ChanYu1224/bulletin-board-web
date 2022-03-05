@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import views
 
 from django.http import Http404
 from django.db import transaction
@@ -36,7 +37,7 @@ class UserRegister(generics.CreateAPIView):
     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserOwnDetail(generics.RetrieveAPIView):
+class UserOwnDetail(views.APIView):
   permission_classes = [permissions.IsAuthenticated,]
   queryset = User.objects.all()
   serializer_class = UserSerializer
