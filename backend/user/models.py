@@ -1,6 +1,7 @@
 from uuid import uuid4
 from django.utils import timezone
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 #AbstractBaseUserを利用してUserモデルをカスタマイズ
 from django.contrib.auth.models import AbstractBaseUser
@@ -37,7 +38,7 @@ class UserManager(BaseUserManager):
 
     return user
 
-  def create_superuser(self, email, name, password):
+  def create_superuser(self, name, email, password):
     """create and save a new superuser with given details"""
     request_data = {
       'name': name,

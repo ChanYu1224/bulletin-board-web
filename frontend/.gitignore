@@ -1,14 +1,7 @@
-# back end
-__pycache__/
-venv/
-*.log
-*.sqlite3
-*.pyc
-
-# front end
 .DS_Store
 node_modules
 /dist
+
 
 # local env files
 .env.local

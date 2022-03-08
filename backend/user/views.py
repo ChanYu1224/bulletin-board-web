@@ -2,7 +2,6 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework import views
 
 from django.http import Http404
 from django.db import transaction
@@ -18,7 +17,7 @@ class UserList(generics.ListAPIView):
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-  permissions_classes = [permissions.IsAdminUser,]
+  permission_classes = [permissions.IsAdminUser,]
   queryset = User.objects.all()
   serializer_class = UserSerializer
 
@@ -37,7 +36,7 @@ class UserRegister(generics.CreateAPIView):
     return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserOwnDetail(views.APIView):
+class UserOwnDetail(generics.RetrieveAPIView):
   permission_classes = [permissions.IsAuthenticated,]
   queryset = User.objects.all()
   serializer_class = UserSerializer
@@ -45,9 +44,11 @@ class UserOwnDetail(views.APIView):
   # GETメソッドでユーザ自身の情報を取得
   def get(self, request):
     response_data = {
+      'id': request.user.id,
       'name': request.user.name,
       'email': request.user.email,
       'profile': request.user.profile,
+      'is_staff': request.user.is_staff,
     }
     return Response(data=response_data, status=status.HTTP_200_OK)
 
@@ -60,7 +61,7 @@ class UserOwnUpdate(generics.UpdateAPIView):
 
   def get_object(self):
     try:
-      instance = self.queryset.get(email=self.request.user)
+      instance = self.queryset.get(id=self.request.user.id)
       return instance
     except User.DoesNotExist:
       raise Http404
@@ -74,7 +75,7 @@ class UserOwnDelete(generics.DestroyAPIView):
 
   def get_object(self):
     try:
-      instance = self.queryset.get(email=self.request.user)
+      instance = self.queryset.get(id=self.request.user.id)
       return instance
     except User.DoesNotExist:
       raise Http404
