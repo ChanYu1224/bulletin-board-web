@@ -1,5 +1,6 @@
 <template>
-  <v-app-bar color="blue-grey darken-2"
+  <v-app-bar
+  color="blue-grey darken-2"
   elevate-on-scroll
   app
   >

@@ -55,21 +55,23 @@ export default {
     }
   },
   methods:{
-    async login(){
+    login(){
       this.loading = true;
       const authData = {
         email: this.email,
         password: this.password,
       };
-      await this.$store.dispatch('login', authData);
-      if(!this.$store.getters.isValid){
-        sweetAlert.fire({
-          title: 'ログインできませんでした',
-          text: 'メールアドレスもしくはパスワード、又は両方が間違っています。',
-          showConfirmButton: true,
-        });
-      }
-      this.loading = false;
+      this.$store.dispatch('login', authData)
+      .then(() => {
+        if(!this.$store.getters.isValid){
+          sweetAlert.fire({
+            title: 'ログインできませんでした',
+            text: 'メールアドレスもしくはパスワード、又は両方が間違っています。',
+            showConfirmButton: true,
+          });
+        }
+        this.loading = false;
+      });
     }
   },
 }

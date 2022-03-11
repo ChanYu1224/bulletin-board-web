@@ -77,23 +77,36 @@ export default {
       loading: false,
     }
   },
-  methods:{
-    async register(){
-      this.loading = true;
-      const registerRequest = {
+  computed:{
+    registerRequest(){
+      return {
         name: this.name,
         email: this.email,
         password: this.password,
         profile: this.profile,
       }
-      await this.$store.dispatch('register', registerRequest);
-      if(!this.$store.getters.isValid){
-        sweetAlert.fire({
-          title: '会員登録に失敗しました。',
-          text: '既に登録されているメールアドレスです。',
-          showConfirmButton: true,
-        });
+    },
+    loginRequest(){
+      return {
+        email: this.email,
+        password: this.password,
       }
+    },
+  },
+  methods:{
+    register(){
+      this.loading = true;
+      this.$store.dispatch('register', this.registerRequest)
+      .then(() => {
+        if(!this.$store.getters.isValid){
+          console.log('fire')
+          sweetAlert.fire({
+            title: '会員登録に失敗しました。',
+            text: '正しく情報が入力されていないか、既に登録されているメールアドレスです。',
+            showConfirmButton: true,
+          });
+        }
+      });
       this.loading = false;
     }
   },

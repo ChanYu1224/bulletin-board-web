@@ -50,16 +50,12 @@ const actions = {
   async obtainJWT({commit, dispatch}, authData){
     await axios.post('/api-token-obtain/', authData)
     .then(response => {
-      if(response.status == 200){
-        dispatch('setJWT', response.data.token);
-        commit('setIsValid', true);
-      }
-      else{
-        commit('setIsValid', false);
-      }
+      dispatch('setJWT', response.data.token);
+      commit('setIsValid', true);
     })
     .catch(error => {
       console.log(error);
+      commit('setIsValid', false);
     });
   },
 
@@ -143,13 +139,17 @@ const actions = {
 
   //会員登録処理
   async register({dispatch}, registerData){
+    const loginRequest = {
+      email: registerData.email,
+      password: registerData.password,
+    }
     await axios.post('/api/users/register/', registerData)
-    .then(() => {
-      const loginRequest = {
-        email: registerData.email,
-        password: registerData.password,
-      }
-      dispatch('login', loginRequest);
+    .catch(error => {
+      console.log(error);
+    });
+    await dispatch('login', loginRequest)
+    .catch(error => {
+      console.log(error);
     });
   }
 }
