@@ -78,7 +78,7 @@ export default {
     }
   },
   methods:{
-    register(){
+    async register(){
       this.loading = true;
       const registerRequest = {
         name: this.name,
@@ -86,7 +86,7 @@ export default {
         password: this.password,
         profile: this.profile,
       }
-      this.$store.dispatch('register', registerRequest);
+      await this.$store.dispatch('register', registerRequest);
       if(!this.$store.getters.isValid){
         sweetAlert.fire({
           title: '会員登録に失敗しました。',

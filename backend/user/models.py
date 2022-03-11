@@ -59,7 +59,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
   """database model for users in the system"""
 
-  id = models.UUIDField(default=uuid4(), primary_key=True)
+  id = models.UUIDField(default=uuid4, primary_key=True)
   email = models.EmailField(max_length=255, unique=True)
   name = models.CharField(max_length=255)
   is_active = models.BooleanField(default=True)
