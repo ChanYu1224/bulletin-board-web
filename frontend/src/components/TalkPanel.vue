@@ -15,15 +15,15 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn
+              <!-- <v-btn
               color="grey"
               class="white--text"
-              v-if="$store.getters.userInfo.id == talk.send_by.id || isStaff"
-              >編集</v-btn>
+              v-if="userInfo.id == talk.send_by.id || userInfo.is_staff"
+              >編集</v-btn> -->
               <v-btn
               color="red"
               class="white--text"
-              v-if="$store.getters.userInfo.id == talk.send_by.id || isStaff"
+              v-if="userInfo.id == talk.send_by.id || userInfo.is_staff"
               @click="deleteTalk(talk.id)"
               >削除</v-btn>
             </v-card-actions>
@@ -31,6 +31,31 @@
         </v-item>
       </v-item-group>
     </v-row>
+    <v-card width="700px" class="mx-auto mt-5">
+      <v-card-title primary-title>
+        <h3>投稿フォーム</h3>
+      </v-card-title>
+      <v-card-text>
+        <v-form>
+          <v-textarea
+            label="本文"
+            v-model="content"
+            type="text"
+            auto-grow
+            @keypress.enter="postTalk"
+          ></v-textarea>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+        @click="postTalk"
+        color="blue-grey darken-2"
+        class="blue-grey--text text--lighten-5"
+        :disabled="!contentExists"
+        >送信</v-btn>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
@@ -41,22 +66,43 @@ export default {
   data(){
     return{
       talks:[],
+      content: "",
+      loading: false,
     }
   },
   computed:{
-    isStaff(){
-      return this.$store.getters.userInfo.is_staff;
+    userInfo(){
+      return this.$store.getters.userInfo
+    },
+    requestHeader(){
+      return this.$store.getters.requestHeader
+    },
+    contentExists(){
+      return this.content !== ""
     }
   },
   methods:{
     getTalks(){
-      axios.get('/api/talks/list/', this.$store.getters.requestHeader)
+      axios.get('/api/talks/list/', this.requestHeader)
       .then(response => {
         this.talks = response.data;
       })
     },
+    postTalk(){
+      this.loading = true;
+      const request = {
+        send_by: this.userInfo.id,
+        content: this.content,
+      }
+      axios.post('/api/talks/create/', request, this.requestHeader)
+      .then(() => {
+        this.getTalks();
+      });
+      this.content = "";
+      this.loading = false;
+    },
     deleteTalk(talkId){
-      axios.delete('api/talks/'+talkId+'/edit/', this.$store.getters.requestHeader)
+      axios.delete('api/talks/'+talkId+'/edit/', this.requestHeader)
       .then(() => {
         this.getTalks();
       });

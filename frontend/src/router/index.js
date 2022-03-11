@@ -14,7 +14,7 @@ const routes = [
     name: 'talk',
     component: TalkView,
     beforeEnter(to, from, next){
-      if(store.getters.JWT){
+      if(store.getters.isValid){
         next();
       }
       else{
@@ -27,7 +27,7 @@ const routes = [
     name: 'login',
     component: LoginView,
     beforeEnter(to, from, next){
-      if(store.getters.JWT){
+      if(store.getters.isValid){
         next('/');
       }
       else{
@@ -40,7 +40,7 @@ const routes = [
     name: 'register',
     component: RegisterView,
     beforeEnter(to, from, next){
-      if(store.getters.JWT){
+      if(store.getters.isValid){
         next('/');
       }
       else{

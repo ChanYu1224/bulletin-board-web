@@ -17,6 +17,7 @@
           v-model="password"
           :type="passwordVisible? 'text':'password'"
           :rules="[rules.required, rules.lengthMoreThan6]"
+          @keypress.enter="login"
           prepend-icon="mdi-lock"
           :append-icon="passwordVisible? 'mdi-eye':'mdi-eye-off'"
           @click:append="passwordVisible = !passwordVisible"

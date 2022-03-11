@@ -89,14 +89,12 @@ const actions = {
       token: localStorage.getItem('JWT'),
     }
     await axios.post('/api-token-verify/', request)
-    .then(response => {
-      if(response.status == 200){
-        commit('setIsValid', true);
-      }
-      else{
-        commit('setIsValid', false);
-      }
-    });
+    .then(() => {
+      commit('setIsValid', true);
+    })
+    .catch(() => {
+      commit('setIsValid', false);
+    })
   },
 
   //ユーザ情報の取得
@@ -132,12 +130,6 @@ const actions = {
     if(getters.isValid){
       await dispatch('refreshJWT');
       dispatch('obtainUserInfo');
-      router.push('/')
-      .catch(()=>{});
-    }
-    else{
-      router.push('/login')
-      .catch(()=>{});
     }
   },
 
