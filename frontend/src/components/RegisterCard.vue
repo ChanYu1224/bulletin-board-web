@@ -6,50 +6,51 @@
     <v-card-text>
       <v-form v-model="isValid">
         <v-text-field
-          label="ユーザー名"
-          v-model="name"
-          :rules="[rules.required]"
-          prepend-icon="mdi-account-circle"
+        label="ユーザー名"
+        v-model="name"
+        :rules="[rules.required]"
+        prepend-icon="mdi-account-circle"
         ></v-text-field>
         <v-text-field
-          label="登録メールアドレス"
-          v-model="email"
-          type="email"
-          :rules="[rules.required, rules.isMailAddress]"
-          prepend-icon="mdi-email"
+        label="登録メールアドレス"
+        v-model="email"
+        type="email"
+        :rules="[rules.required, rules.isMailAddress]"
+        prepend-icon="mdi-email"
+        
         ></v-text-field>
         <v-text-field
-          label="パスワード"
-          v-model="password"
-          type="password"
-          :rules="[rules.required, rules.lengthMoreThan6]"
-          prepend-icon="mdi-lock"
+        label="パスワード"
+        v-model="password"
+        type="password"
+        :rules="[rules.required, rules.lengthMoreThan6]"
+        prepend-icon="mdi-lock"
         ></v-text-field>
         <v-text-field
-          label="パスワード（確認）"
-          v-model="passwordForCheck"
-          type="password"
-          :rules="[rules.required, rules.lengthMoreThan6, rules.isSamePassword]"
-          prepend-icon="mdi-lock"
+        label="パスワード（確認）"
+        v-model="passwordForCheck"
+        type="password"
+        :rules="[rules.required, rules.lengthMoreThan6, rules.isSamePassword]"
+        prepend-icon="mdi-lock"
         ></v-text-field>
         <v-textarea
-          label="プロフィール"
-          v-model="profile"
-          type="text"
-          :rules="[rules.lengthLessThan200]"
-          counter="200"
-          outlined
-          auto-grow
+        label="プロフィール"
+        v-model="profile"
+        type="text"
+        :rules="[rules.lengthLessThan200]"
+        counter="200"
+        outlined
+        auto-grow
         ></v-textarea>
       </v-form>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn 
-        @click="register"
-        color="blue-grey darken-2"
-        class="blue-grey--text text--lighten-5"
-        :disabled="!isValid || loading"
+      @click="register"
+      color="blue-grey darken-2"
+      class="blue-grey--text text--lighten-5"
+      :disabled="!isValid || loading"
       >会員登録</v-btn>
     </v-card-actions>
   </v-card>
@@ -99,7 +100,6 @@ export default {
       this.$store.dispatch('register', this.registerRequest)
       .then(() => {
         if(!this.$store.getters.isValid){
-          console.log('fire')
           sweetAlert.fire({
             title: '会員登録に失敗しました。',
             text: '正しく情報が入力されていないか、既に登録されているメールアドレスです。',
